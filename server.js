@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send(database.users);
+  res.send("IT IS WORKING!");
 });
 app.post("/signin", (req, res) => {
   signin.handleSignin(req, res, db, bcrypt);
@@ -56,7 +56,7 @@ module.exports = {
 };
 
 app.listen(process.env.PORT || 3000, () => {
-  console.log("App is running on port 3000");
+  console.log(`App is running on port ${process.env.PORT}`);
 });
 /*
 / --> res = success
