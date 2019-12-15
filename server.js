@@ -15,7 +15,7 @@ const handleApiCall = (req, res) => {
   clarifaiApp.models
     .predict(Clarifai.FOOD_MODEL, req.body.input)
     .then(data => {
-        res.json(data);
+      res.json(data);
     })
     .catch(err => res.status(400).json("errorrrrrr"));
 };
@@ -55,7 +55,7 @@ module.exports = {
   handleApiCall: handleApiCall
 };
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log("App is running on port 3000");
 });
 /*
