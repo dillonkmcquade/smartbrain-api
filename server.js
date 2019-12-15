@@ -23,10 +23,11 @@ const handleApiCall = (req, res) => {
 const db = knex({
   client: "pg",
   connection: {
-    host: "postgres://imwxjwntilnoga:498dd19b38722cd6c12196d518a9e6d5f10662eb82f7b5d0858adebdcda58634@ec2-174-129-255-91.compute-1.amazonaws.com:5432/d968l1155h586v",
-    user: "postgres",
-    password: "dkm81593",
-    database: "smart-brain"
+    host:
+      "postgres://imwxjwntilnoga:498dd19b38722cd6c12196d518a9e6d5f10662eb82f7b5d0858adebdcda58634@ec2-174-129-255-91.compute-1.amazonaws.com:5432/d968l1155h586v",
+    user: "imwxjwntilnoga",
+    password: "",
+    database: "fierce-mountain-50317"
   }
 });
 
