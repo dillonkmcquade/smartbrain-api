@@ -8,7 +8,7 @@ const profileId = require("./controllers/profileId");
 const Clarifai = require("clarifai");
 
 const clarifaiApp = new Clarifai.App({
-  apiKey: "1d7d2ac1e9164b4c9828d5377acb43e4"
+  apiKey: process.env.API_KEY
 });
 
 const handleApiCall = (req, res) => {
