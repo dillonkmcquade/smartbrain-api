@@ -8,23 +8,22 @@ const profileId = require("./controllers/profileId");
 const Clarifai = require("clarifai");
 
 const clarifaiApp = new Clarifai.App({
-  apiKey: process.env.API_KEY
+  apiKey: "1d7d2ac1e9164b4c9828d5377acb43e4"
 });
 
 const handleApiCall = (req, res) => {
   clarifaiApp.models
     .predict(Clarifai.FOOD_MODEL, req.body.input)
-    .then(data => {
+    .then(res => {
       res.json(data);
     })
-    .catch(err => res.status(400).json("errorrrrrr"));
+    .catch(err => res.status(400).json(err));
 };
 
 const db = knex({
   client: "pg",
   connection: {
-    connectionString:
-      process.env.DATABASE_URL,
+    connectionString: process.env.DATABASE_URL,
     ssl: true
   }
 });
