@@ -14,10 +14,10 @@ const clarifaiApp = new Clarifai.App({
 const handleApiCall = (req, res) => {
   clarifaiApp.models
     .predict(Clarifai.FOOD_MODEL, req.body.input)
-    .then(res => {
+    .then(data => {
       res.json(data);
     })
-    .catch(err => res.status(400).json(err));
+    .catch(err => res.status(400).json('error'));
 };
 
 const db = knex({
