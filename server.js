@@ -6,6 +6,7 @@ const register = require("./controllers/register");
 const signin = require("./controllers/signin");
 const profileId = require("./controllers/profileId");
 const Clarifai = require("clarifai");
+const morgan = require("morgan");
 
 const clarifaiApp = new Clarifai.App({
   apiKey: process.env.API_KEY
@@ -17,19 +18,16 @@ const handleApiCall = (req, res) => {
     .then(data => {
       res.json(data);
     })
-    .catch(err => res.status(400).json('error'));
+    .catch(err => res.status(400).json("error"));
 };
 
 const db = knex({
   client: "pg",
-  connection: {
-    connectionString: process.env.DATABASE_URL,
-    ssl: true
-  }
+  connection: process.env.POSTGRES_URI
 });
 
 const app = express();
-
+app.use(morgan("combined"));
 app.use(express.json());
 app.use(cors());
 

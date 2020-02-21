@@ -1,0 +1,29 @@
+version: "3.6"
+
+services:
+  #Backend
+  smartbrain-api:
+    container_name: backend
+    build: ./
+    command: npm start
+    working_dir: /usr/src/smartbrain-api
+    environment:
+      POSTGRES_URI: postgres://imwxjwntilnoga:secret@postgres:5432/smartbrain-docker
+      API_KEY: 1d7d2ac1e9164b4c9828d5377acb43e4
+      PORT: 3000
+    links:
+      - postgres
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/usr/src/smartbrain-api
+    #Postgres
+  postgres:
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: smartbrain-docker
+      POSTGRES_USER: imwxjwntilnoga
+      POSTGRES_PASSWORD: secret
+    build: ./postgres
+    ports:
+      - "5432:5432"
