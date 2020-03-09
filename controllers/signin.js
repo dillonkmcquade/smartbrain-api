@@ -1,9 +1,11 @@
 const handleSignin = (req, res, db, bcrypt) => {
   const { email, password } = req.body;
+  
   if (!email || !password) {
-    return res.status(400).json("Incorrect form submission");
-  }
-  db.select("email", "hash")
+    return Promise.reject("Incorrect form submission");
+  };
+  return db
+    .select("email", "hash")
     .from("login")
     .where("email", "=", email)
     .then(data => {
@@ -13,17 +15,28 @@ const handleSignin = (req, res, db, bcrypt) => {
           .select("*")
           .from("users")
           .where("email", "=", email)
-          .then(user => {
-            res.json(user[0]);
-          })
-          .catch(err => res.status(400).json("unable to get user"));
+          .then(data => (data[0]))
+          .catch(err => Promise.reject("unable to get user"));
       } else {
-        res.status(400).json("wrong credentials");
+        Promise.reject("wrong credentials");
       }
     })
-    .catch(err => res.status(400).json("Wrong credentials."));
+    .catch(err => Promise.reject("Wrong credentials."));
+};
+
+const getAuthTokenId = () => {
+  console.log("auth ok");
+};
+
+const signinAuthentication = (db, bcrypt) => (req, res) => {
+  const { authorization } = req.headers;
+  return authorization
+    ? getAuthTokenId()
+    : handleSignin(db, bcrypt, req, res)
+        .then(data => res.json(data))
+        .catch(err => res.status(400).json('err'));
 };
 
 module.exports = {
-  handleSignin: handleSignin
+  signinAuthentication: signinAuthentication
 };

@@ -26,6 +26,7 @@ const db = knex({
   connection: process.env.POSTGRES_URI
 });
 
+
 const app = express();
 app.use(morgan("combined"));
 app.use(express.json());
@@ -34,14 +35,15 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send("IT IS WORKING!");
 });
-app.post("/signin", (req, res) => {
-  signin.handleSignin(req, res, db, bcrypt);
-});
+app.post("/signin", signin.signinAuthentication(db, bcrypt));
 app.post("/register", (req, res) => {
   register.handleRegister(req, res, db, bcrypt);
 });
-app.get("./profile/:id", (req, res) => {
+app.get("/profile/:id", (req, res) => {
   profileId.handleProfileGet(req, res, db);
+});
+app.post("/profile/:id", (req, res) => {
+  profileId.handleProfileUpdate(req, res, db, bcrypt);
 });
 app.post("/imagedata", (req, res) => {
   handleApiCall(req, res);
@@ -51,7 +53,7 @@ module.exports = {
   handleApiCall: handleApiCall
 };
 
-app.listen(process.env.PORT || 3001, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log(`App is running on port ${process.env.PORT}`);
 });
 /*
