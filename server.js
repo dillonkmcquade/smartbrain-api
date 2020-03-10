@@ -2,11 +2,13 @@ const express = require("express");
 const bcrypt = require("bcrypt-nodejs");
 const cors = require("cors");
 const knex = require("knex");
+
+const Clarifai = require("clarifai");
+const morgan = require("morgan");
+
 const register = require("./controllers/register");
 const signin = require("./controllers/signin");
 const profileId = require("./controllers/profileId");
-const Clarifai = require("clarifai");
-const morgan = require("morgan");
 
 const clarifaiApp = new Clarifai.App({
   apiKey: process.env.API_KEY
@@ -26,8 +28,8 @@ const db = knex({
   connection: process.env.POSTGRES_URI
 });
 
-
 const app = express();
+
 app.use(morgan("combined"));
 app.use(express.json());
 app.use(cors());
@@ -56,9 +58,3 @@ module.exports = {
 app.listen(process.env.PORT || 3000, () => {
   console.log(`App is running on port ${process.env.PORT}`);
 });
-/*
-/ --> res = success
-/signin  --> POST = success/fail
-/register --> POST = user
-/profile/:userId -- > GET = user
-*/

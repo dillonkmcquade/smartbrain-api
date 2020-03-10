@@ -1,9 +1,14 @@
-const handleSignin = (req, res, db, bcrypt) => {
+const jwt = require("jsonwebtoken");
+const redis = require("redis");
+
+const redisClient = redis.createClient(process.env.REDIS_URI);
+
+const handleSignin = (db, bcrypt, req, res) => {
   const { email, password } = req.body;
-  
+
   if (!email || !password) {
     return Promise.reject("Incorrect form submission");
-  };
+  }
   return db
     .select("email", "hash")
     .from("login")
@@ -15,26 +20,58 @@ const handleSignin = (req, res, db, bcrypt) => {
           .select("*")
           .from("users")
           .where("email", "=", email)
-          .then(data => (data[0]))
+          .then(data => data[0])
           .catch(err => Promise.reject("unable to get user"));
       } else {
-        Promise.reject("wrong credentials");
+        return Promise.reject("wrong credentials");
       }
     })
     .catch(err => Promise.reject("Wrong credentials."));
 };
 
-const getAuthTokenId = () => {
-  console.log("auth ok");
+const signToken = email => {
+  const jwtpayload = { email };
+  return jwt.sign(jwtpayload, "secret", { expiresIn: "2 days" });
+};
+
+const getAuthTokenId = (req, res) => {
+  const { authorization } = req.headers;
+  redisClient.get(authorization, (err, reply) => {
+    if (err || !reply) {
+      return res.status(400).json("Unauthorized");
+    }
+    return res.json({ id: reply });
+  });
+};
+
+const setToken = (key, value) => {
+  return Promise.resolve(redisClient.set(key, value));
+};
+
+const createSession = data => {
+  const { email, id } = data;
+  const token = signToken(email);
+  return setToken(token, id)
+    .then(() => ({
+      success: "true",
+      userId: id,
+      token
+    }))
+    .catch(console.log);
 };
 
 const signinAuthentication = (db, bcrypt) => (req, res) => {
   const { authorization } = req.headers;
   return authorization
-    ? getAuthTokenId()
+    ? getAuthTokenId(req, res)
     : handleSignin(db, bcrypt, req, res)
-        .then(data => res.json(data))
-        .catch(err => res.status(400).json('err'));
+        .then(data =>
+          data.id && data.email
+            ? createSession(data)
+            : Promise.reject("error!!!")
+        )
+        .then(session => res.json(session))
+        .catch(err => res.status(400).json(err));
 };
 
 module.exports = {
