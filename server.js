@@ -25,7 +25,7 @@ const handleApiCall = (req, res) => {
 
 const db = knex({
   client: "pg",
-  connection: process.env.POSTGRES_URI
+  connection: DATABASE_URL
 });
 
 const app = express();
@@ -55,6 +55,6 @@ module.exports = {
   handleApiCall: handleApiCall
 };
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`App is running on port ${process.env.PORT}`);
+app.listen(PORT || 3000, () => {
+  console.log(`App is running on port ${PORT}`);
 });
