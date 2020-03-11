@@ -11,7 +11,7 @@ const signin = require("./controllers/signin");
 const profileId = require("./controllers/profileId");
 
 const clarifaiApp = new Clarifai.App({
-  apiKey: process.env.API_KEY
+  apiKey: API_KEY
 });
 
 const handleApiCall = (req, res) => {
@@ -55,6 +55,6 @@ module.exports = {
   handleApiCall: handleApiCall
 };
 
-app.listen(PORT || 3000, () => {
-  console.log(`App is running on port ${PORT}`);
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`App is running on port ${process.env.PORT}`);
 });
