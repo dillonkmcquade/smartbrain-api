@@ -11,7 +11,7 @@ const signin = require("./controllers/signin");
 const profileId = require("./controllers/profileId");
 
 const clarifaiApp = new Clarifai.App({
-  apiKey: API_KEY
+  apiKey: process.env.API_KEY
 });
 
 const handleApiCall = (req, res) => {
@@ -25,7 +25,7 @@ const handleApiCall = (req, res) => {
 
 const db = knex({
   client: "pg",
-  connection: DATABASE_URL
+  connection: process.env.DATABASE_URL
 });
 
 const app = express();
