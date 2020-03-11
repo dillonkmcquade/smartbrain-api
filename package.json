@@ -1,7 +1,7 @@
 {
   "name": "smartbrains-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Back-end for foodifai",
   "main": "index.js",
   "scripts": {
     "start": "node server.js"
