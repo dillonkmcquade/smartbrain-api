@@ -10,13 +10,13 @@ services:
     environment:
       POSTGRES_URI: postgres://imwxjwntilnoga:secret@postgres:5432/smartbrain-docker
       API_KEY: 1d7d2ac1e9164b4c9828d5377acb43e4
-      PORT: 3000
+      PORT: 80
       REDIS_URI: redis://redis:6379
     links:
       - postgres
       - redis
     ports:
-      - "3000:3000"
+      - "80:80"
     volumes:
       - ./:/usr/src/smartbrain-api
     #Postgres
