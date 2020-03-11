@@ -1,2 +1,4 @@
 /node_modules
 /smartbrains-api
+docker-compose.yml
+Dockerfile
