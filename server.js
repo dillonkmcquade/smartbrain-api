@@ -25,7 +25,7 @@ const handleApiCall = (req, res) => {
 
 const db = knex({
   client: "pg",
-  connection: process.env.DATABASE_URL
+  connection: process.env.POSTGRES_URI
 });
 
 const app = express();

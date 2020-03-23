@@ -8,8 +8,8 @@ services:
     command: npm start
     working_dir: /usr/src/smartbrain-api
     environment:
-      POSTGRES_URI: postgres://imwxjwntilnoga:secret@postgres:5432/smartbrain-docker
-      API_KEY: 1d7d2ac1e9164b4c9828d5377acb43e4
+      POSTGRES_URI: postgres://imwxjwntilnoga:$PG_PWD@postgres:5432/smartbrain-docker
+      API_KEY: $CLARIFAI_API_KEY
       PORT: 80
       REDIS_URI: redis://redis:6379
     links:
@@ -25,7 +25,7 @@ services:
       POSTGRES_HOST: postgres
       POSTGRES_DB: smartbrain-docker
       POSTGRES_USER: imwxjwntilnoga
-      POSTGRES_PASSWORD: secret
+      POSTGRES_PASSWORD: $PG_PWD
     build: ./postgres
     ports:
       - "5432:5432"
