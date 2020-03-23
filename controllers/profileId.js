@@ -4,7 +4,6 @@ const handleProfileGet = (req, res, db) => {
     .from("users")
     .where({ id })
     .then(user => {
-      
       if (user.length) {
         res.json(user[0]);
       } else {
@@ -17,16 +16,17 @@ const handleProfileGet = (req, res, db) => {
 const handleProfileUpdate = (req, res, db, bcrypt) => {
   const { id } = req.params;
   const { email, currentPassword, newPassword, confirmPassword } = req.body;
-  if (!newPassword || !currentPassword || !confirmPassword) {
+  if (!newPassword || !currentPassword || !confirmPassword || !email) {
     return res.status(400).json("incorrect credentials");
   }
   const newHash = bcrypt.hashSync(newPassword);
+
   const currentHash = bcrypt.hashSync(currentPassword);
   const passwordMatch =
     newPassword === confirmPassword
       ? true
       : res.status(400).json("passwords do not match");
-
+  console.log("updating profile");
   return db
     .select("*")
     .from("users")
@@ -34,14 +34,7 @@ const handleProfileUpdate = (req, res, db, bcrypt) => {
     .then(user => {
       const isValid = bcrypt.compareSync(currentHash, user[0].hash);
       if (isValid && passwordMatch) {
-        db("hash").transaction(trx => {
-          trx
-            .insert({
-              newHash
-            })
-            .then(trx.commit)
-            .catch(trx.rollback);
-        });
+        return res.json(db);
       } else {
         return res.status(400).json("wrong credentials");
       }
