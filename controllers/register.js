@@ -45,13 +45,14 @@ const handleRegister = (req, res, db, bcrypt) => {
             joined: new Date()
           })
           .then(async user => {
-            if (user[0] && user[0].email) {
+            if (user[0].id && user[0].email) {
               const newSesh = await createSession(user[0]);
               await res.json(newSesh);
             } else {
               res.status(400).json("error registering new user to database");
             }
-          });
+          })
+          .catch(console.log);
       })
       .then(trx.commit)
       .catch(trx.rollback);
